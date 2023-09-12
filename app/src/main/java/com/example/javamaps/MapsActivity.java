@@ -47,7 +47,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
 
-        registerLauncher(); // Marge Branches
+        registerLauncher(); //
     }
 
     @Override
