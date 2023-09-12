@@ -1,0 +1,13 @@
+<resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- Base application theme. -->
+    <style name="Base.Theme.JavaMaps" parent="Theme.AppCompat.Light.DarkActionBar">
+
+        <item name="android:statusBarColor">#091B81</item>
+        <!-- Customize your dark theme here. -->
+        <!-- <item name="colorPrimary">@color/my_dark_primary</item> -->
+    </style>
+
+    <style name="Theme.JavaMaps" parent="Base.Theme.JavaMaps" >
+        <item name="colorPrimary">#091B81</item>
+    </style>
+</resources>
