@@ -58,8 +58,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         locationListener = new LocationListener() {                                          //Konum dinleyicisi
             @Override
-            public void onLocationChanged(@NonNull Location location) {                                         // Konum değişince çalışacak metot
-                System.out.println("Location: " + location.toString());                                         //telefonun mevcut konumu logchatte yazdırılacaktır.
+            public void onLocationChanged(@NonNull Location location) {                      // Konum değişince çalışacak metot
+                LatLng userLocation = new LatLng(location.getLatitude(),location.getLongitude()); //Kullanıcının yeni konumunn enlem ve boylamını alarak userLocation değişkeninin içine koyduk. ev aşağıda bunu kullanarak kameranın bu konuma  hareket etmesini sağlayacağız:
+                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation,15));
             }
             //eğer çalışmayan bir sürüm olursa hata alırsak boş bir şekilde onStatusChanged metotdunu çağırabiliriz.
         };
@@ -82,6 +83,15 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         }else {
             // Aşağıdaki kod satırında Konum değişikliklerini isteyebiliriz. Son güncellemeleri alabiliriz ama izin gereklidir.
             locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,0,locationListener); //Bu kodlar izin istenmeden çalışmaz. (0,0 normalde çok fazla enerji tüketir çünkü 0 saniye ve 0 yer değişikliğinde konumu güncelleme komutudur.)
+
+            //Son bilinen konumu alma: LocationManeger'in içieriisnde zaten var.
+            //Şimdi kullanıcının son konumunu alalım:
+            Location lastLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER); //Kullanıcının Son GPS'ini al ve lastLocation değişkenine eşitle.
+            if(lastLocation!=null){ //Eğer son konum boş değilse: kullanıcının konumunu tekarar LatLng ile alalım ve bir değişkene atayalım:
+            LatLng lastUserLocation = new LatLng(lastLocation.getLatitude(),lastLocation.getLongitude());
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(lastUserLocation,15)); //Kullanıcının konumuna kamerayı yöneltip 15 zoom yapmak için.
+           //Yokarıdaki son konumu alma kod bloğunu kopyalayıp, aşayıdaki ilk izinin alındığı yere de yapıştıralım.
+            }
         }
 
 
@@ -111,12 +121,20 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                     //(locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,0,locationListener);) bu kod hata veriyor olabilir.Bunu garanti hale getirmek için if içieisinde bir kontrol daha yapılır.
                     if(ContextCompat.checkSelfPermission(MapsActivity.this,Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED){ //izin verildiyse : konumu aşağıdaki satırda iste.
                         locationManager.requestLocationUpdates(LocationManager.GPS_PROVIDER,0,0,locationListener); //Bu kodlar izin istenmeden çalışmaz. (0,0 normalde çok fazla enerji tüketir çünkü 0 saniye ve 0 yer değişikliğinde konumu güncelleme komutudur.)
+
+                        //Son bilinen konumu alma: LocationManeger'in içieriisnde zaten var.
+                        //Şimdi kullanıcının son konumunu alalım:
+                        Location lastLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER); //Kullanıcının Son GPS'ini al ve lastLocation değişkenine eşitle.
+                        if(lastLocation!=null){ //Eğer son konum boş değilse: kullanıcının konumunu tekarar LatLng ile alalım ve bir değişkene atayalım:
+                        LatLng lastUserLocation = new LatLng(lastLocation.getLatitude(),lastLocation.getLongitude());
+                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(lastUserLocation,15)); //Kullanıcının konumuna kamerayı yöneltip 15 zoom yapmak için.
                     }
                 }else {//Perrmission Denied (İzin reddedildi)
                     Toast.makeText(MapsActivity.this, "İzin lazım", Toast.LENGTH_SHORT).show();
                 }
             }
-        });
-    }
+        };
+    });
 
+  }
 }
