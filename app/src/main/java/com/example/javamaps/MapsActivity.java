@@ -10,6 +10,7 @@ import androidx.fragment.app.FragmentActivity;
 
 import android.Manifest;
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.location.Location;
 import android.location.LocationListener;
@@ -27,13 +28,15 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.example.javamaps.databinding.ActivityMapsBinding;
 import com.google.android.material.snackbar.Snackbar;
 
-public class MapsActivity extends FragmentActivity implements OnMapReadyCallback {
+public class MapsActivity extends FragmentActivity implements OnMapReadyCallback, GoogleMap.OnMapLongClickListener { //GoogleMap.OnMapLongClickListener iplement ederek haritaya uzun tıklanması durumunda bir işlemyapabiliriz.
 
     private GoogleMap mMap;
     private ActivityMapsBinding binding;
     ActivityResultLauncher<String> permissionLauncher; //(izin başlatıcısı)
     LocationManager locationManager; //Konum yöneticisi
     LocationListener locationListener; //Konum dinleyicisi
+    SharedPreferences sharedPreferences;
+    Boolean info;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,19 +51,34 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         mapFragment.getMapAsync(this);
 
         registerLauncher(); //
+
+        sharedPreferences = this.getSharedPreferences("package com.example.javamaps",MODE_PRIVATE);
+        info = false;
     }
 
     @Override
     public void onMapReady(GoogleMap googleMap)  {
         mMap = googleMap;
 
+        mMap.setOnMapLongClickListener(this); //Haritaya uzun tıklanınca listener vermemiz lazım listener de arayüzüe verildiği için this verebiliriz.
+
         // Telefonun konumunu anlayabilmek için bulabilmek için:
         locationManager = (LocationManager) this.getSystemService(Context.LOCATION_SERVICE);
         locationListener = new LocationListener() {                                          //Konum dinleyicisi
             @Override
             public void onLocationChanged(@NonNull Location location) {                      // Konum değişince çalışacak metot
-                LatLng userLocation = new LatLng(location.getLatitude(),location.getLongitude()); //Kullanıcının yeni konumunn enlem ve boylamını alarak userLocation değişkeninin içine koyduk. ev aşağıda bunu kullanarak kameranın bu konuma  hareket etmesini sağlayacağız:
-                mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation,15));
+
+
+                info = sharedPreferences.getBoolean("info",false); //uygulama açılınca ilk kullanıcının yerini kaydetmek için
+
+                if (!info){ //info == false demek
+                    LatLng userLocation = new LatLng(location.getLatitude(),location.getLongitude()); //Kullanıcının yeni konumunn enlem ve boylamını alarak userLocation değişkeninin içine koyduk. ev aşağıda bunu kullanarak kameranın bu konuma  hareket etmesini sağlayacağız:
+                    mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(userLocation,15));
+                    sharedPreferences.edit().putBoolean("info",true).apply();
+                    //Bir defa çalıştıktan sorna true değerini alacak ve sonraki çağrılmalarda çalışmasına gerek kalmayacak.
+                }
+
+
             }
             //eğer çalışmayan bir sürüm olursa hata alırsak boş bir şekilde onStatusChanged metotdunu çağırabiliriz.
         };
@@ -92,6 +110,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(lastUserLocation,15)); //Kullanıcının konumuna kamerayı yöneltip 15 zoom yapmak için.
            //Yokarıdaki son konumu alma kod bloğunu kopyalayıp, aşayıdaki ilk izinin alındığı yere de yapıştıralım.
             }
+
+            mMap.setMyLocationEnabled(true); // mavi imleç ile konumumuzu gösterir. Kullanıcı konumunu görebilir.
         }
 
 
@@ -107,9 +127,10 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
         //mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
 
         //Örnek oalrak kendi kodlarımızı yazalım: Açılış konumunu eifell tower olarak belirtelim:
-        LatLng eiffel = new LatLng(48.858595232626534, 2.2947063683711746);
-        mMap.addMarker(new MarkerOptions().position(eiffel).title("Eiffel Tower"));
-        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(eiffel,15));
+
+       // LatLng eiffel = new LatLng(48.858595232626534, 2.2947063683711746);
+       // mMap.addMarker(new MarkerOptions().position(eiffel).title("Eiffel Tower"));
+       // mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(eiffel,15));
     }
 
     public void registerLauncher(){
@@ -137,4 +158,11 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     });
 
   }
+
+    @Override
+    public void onMapLongClick(@NonNull LatLng latLng) { //GoogleMap.OnMapLongClickListener iplement edildikten sonra alt+enter ile eklenmesi gereken metot.
+        mMap.clear(); //her tıklamadan önce bir öncekini temizler
+
+        mMap.addMarker(new MarkerOptions().position(latLng)); // Uzun tıklanan yere marker işaretçisini ekler
+    }
 }
