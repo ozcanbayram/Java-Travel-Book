@@ -1,4 +1,4 @@
-package com.example.javamaps;
+package com.example.javamaps.view;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
@@ -8,6 +8,8 @@ import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+
+import com.example.javamaps.R;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -28,7 +30,7 @@ public class MainActivity extends AppCompatActivity {
     @Override
     public boolean onOptionsItemSelected(@NonNull MenuItem item) { // menüden bir şey seçilirse ne olacak.
         if(item.getItemId() == R.id.add_place){ //add_place' ye mi tıklandı kontrolü.
-            Intent intent = new Intent(MainActivity.this,MapsActivity.class);
+            Intent intent = new Intent(MainActivity.this, MapsActivity.class);
             startActivity(intent);
         }
 
