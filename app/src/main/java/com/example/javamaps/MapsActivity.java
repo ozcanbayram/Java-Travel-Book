@@ -54,6 +54,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
 
         sharedPreferences = this.getSharedPreferences("package com.example.javamaps",MODE_PRIVATE);
         info = false;
+
+
     }
 
     @Override
@@ -107,7 +109,7 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             Location lastLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER); //Kullanıcının Son GPS'ini al ve lastLocation değişkenine eşitle.
             if(lastLocation!=null){ //Eğer son konum boş değilse: kullanıcının konumunu tekarar LatLng ile alalım ve bir değişkene atayalım:
             LatLng lastUserLocation = new LatLng(lastLocation.getLatitude(),lastLocation.getLongitude());
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(lastUserLocation,15)); //Kullanıcının konumuna kamerayı yöneltip 15 zoom yapmak için.
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(lastUserLocation,18)); //Kullanıcının konumuna kamerayı yöneltip 15 zoom yapmak için.
            //Yokarıdaki son konumu alma kod bloğunu kopyalayıp, aşayıdaki ilk izinin alındığı yere de yapıştıralım.
             }
 
