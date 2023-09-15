@@ -212,7 +212,9 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
                         Location lastLocation = locationManager.getLastKnownLocation(LocationManager.GPS_PROVIDER); //Kullanıcının Son GPS'ini al ve lastLocation değişkenine eşitle.
                         if(lastLocation!=null){ //Eğer son konum boş değilse: kullanıcının konumunu tekarar LatLng ile alalım ve bir değişkene atayalım:
                         LatLng lastUserLocation = new LatLng(lastLocation.getLatitude(),lastLocation.getLongitude());
-                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(lastUserLocation,15)); //Kullanıcının konumuna kamerayı yöneltip 15 zoom yapmak için.
+                        mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(lastUserLocation,18)); //Kullanıcının konumuna kamerayı yöneltip 15 zoom yapmak için.
+
+                        mMap.setMyLocationEnabled(true); // mavi imleç ile konumumuzu gösterir. Kullanıcı konumunu görebilir.
                     }
                 }else {//Perrmission Denied (İzin reddedildi)
                     Toast.makeText(MapsActivity.this, "İzin lazım", Toast.LENGTH_SHORT).show();
