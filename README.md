@@ -4,6 +4,8 @@
  
  Travel and location saving application in Java.
 
+ With this application, you can save your places and see them again later and get directions.
+
 
 
  ## Language and Tool:
