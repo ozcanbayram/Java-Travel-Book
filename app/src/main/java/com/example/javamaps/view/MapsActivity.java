@@ -58,6 +58,8 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
+
         binding = ActivityMapsBinding.inflate(getLayoutInflater());
         setContentView(binding.getRoot());
 
@@ -163,11 +165,12 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             LatLng latLng = new LatLng(selectedPlace.latitude,selectedPlace.longitude);
 
             mMap.addMarker(new MarkerOptions().position(latLng).title(selectedPlace.name));
-            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,15));
+            mMap.moveCamera(CameraUpdateFactory.newLatLngZoom(latLng,18));
             binding.placeNameText.setText(selectedPlace.name);
             binding.saveButton.setVisibility(View.GONE);
             binding.deleteButton.setVisibility(View.VISIBLE);
 
+            mMap.setMyLocationEnabled(true); // mavi imleç ile konumumuzu gösterir. Kullanıcı konumunu görebilir.
         }
 
 
