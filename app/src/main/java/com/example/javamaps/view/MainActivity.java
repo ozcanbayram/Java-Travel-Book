@@ -12,7 +12,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 
-import com.example.javamaps.PlaceAdapter;
+import com.example.javamaps.adapter.PlaceAdapter;
 import com.example.javamaps.R;
 import com.example.javamaps.databinding.ActivityMainBinding;
 import com.example.javamaps.model.Place;

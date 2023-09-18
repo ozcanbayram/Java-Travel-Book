@@ -1,4 +1,4 @@
-package com.example.javamaps;
+package com.example.javamaps.adapter;
 
 import android.content.Intent;
 import android.view.LayoutInflater;
